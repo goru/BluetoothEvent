@@ -33,7 +33,11 @@ There are defined in [BluetoothEvent.py](https://github.com/lostman-github/Bluet
 
 Note.
 If you have use Python with pyenv, you need to reinstall Python with framework option.
-Please check [this instruction](https://github.com/yyuu/pyenv/wiki#how-to-build-cpython-with-framework-support-on-os-x)
+Please check [this instruction](https://github.com/yyuu/pyenv/wiki#how-to-build-cpython-with-framework-support-on-os-x).
+
+You can clone and build `BluetoothEvent.app` with following commands.
+(This commands does NOT install any files to your system.
+Compiled files and depends packages will be saved to working directory.)
 
 ```
 $ git clone https://github.com/lostman-github/BluetoothEvent.git
