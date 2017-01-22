@@ -23,7 +23,8 @@ setup(
     },
     setup_requires=[
         'py2app',
-        'rumps'
+        'rumps',
+        'pyobjc==3.2.1'
     ],
     dependency_links=[
         'hg+https://bitbucket.org/ronaldoussoren/py2app@25ce18b#egg=py2app',
