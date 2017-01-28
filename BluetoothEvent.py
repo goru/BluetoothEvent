@@ -47,6 +47,8 @@ class BluetoothEvent(rumps.App):
             self.devices[device.name()] = (device.addressString(), False)
             self.menu.add(rumps.MenuItem(device.name(), callback=self.switch_callback))
 
+        self.menu.add(rumps.separator)
+
         # Setup timer
         self.timer = rumps.Timer(self.timer_callback, interval)
         self.timer.start()
@@ -58,7 +60,7 @@ class BluetoothEvent(rumps.App):
 
     def timer_callback(self, timer):
         for key, item in self.menu.items():
-            if item.state:
+            if isinstance(item, rumps.MenuItem) and item.state:
                 self.check(key)
 
     def check(self, key):
