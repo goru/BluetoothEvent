@@ -5,12 +5,6 @@ import objc
 import urllib, urllib2
 import Foundation
 
-DEVICES = {
-    # You can check device address when right click your device in Bluetooth preference.
-    #"Device 1": "00:00:00:00:00:00",
-    #"Device 2": "FF:FF:FF:FF:FF:FF"
-}
-
 INTERVAL = 10 * 60
 
 def update_callback(key, state):
@@ -31,7 +25,7 @@ def update_callback(key, state):
     #    urllib.urlencode(payload)).read()
 
 class BluetoothEvent(rumps.App):
-    def __init__(self, devices, interval, update_callback):
+    def __init__(self, interval, update_callback):
         super(BluetoothEvent, self).__init__("BluetoothEvent")
 
         # Load IOBluetooth.framework
@@ -49,9 +43,9 @@ class BluetoothEvent(rumps.App):
 
         # Prepare menu items for each devices
         self.devices = {}
-        for name, address in devices.items():
-            self.devices[name] = (address, False)
-            self.menu.add(rumps.MenuItem(name, callback=self.switch_callback))
+        for device in self.iobluetooth.IOBluetoothDevice.pairedDevices():
+            self.devices[device.name()] = (device.addressString(), False)
+            self.menu.add(rumps.MenuItem(device.name(), callback=self.switch_callback))
 
         # Setup timer
         self.timer = rumps.Timer(self.timer_callback, interval)
@@ -81,6 +75,6 @@ class BluetoothEvent(rumps.App):
             self.update_callback(key, current)
 
 if __name__ == "__main__":
-    BluetoothEvent(DEVICES, INTERVAL, update_callback).run()
+    BluetoothEvent(INTERVAL, update_callback).run()
 
 # vim: tabstop=8 expandtab shiftwidth=4 softtabstop=4
