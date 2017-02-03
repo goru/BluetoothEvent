@@ -7,7 +7,7 @@ import Foundation
 
 INTERVAL = 10 * 60
 
-def update_callback(key, state):
+def update_callback(name, address, state):
     pass
 
     # Upload status changes to slack
@@ -15,7 +15,7 @@ def update_callback(key, state):
     #payload = {
     #    "payload": {
     #        "text": "*{state}* (_{deviceName}_)".format(
-    #            deviceName=key,
+    #            deviceName=name,
     #            state={ True: "Seated", False: "Away" }[state]),
     #        "mrkdwn": True
     #    }
@@ -44,8 +44,14 @@ class BluetoothEvent(rumps.App):
         # Prepare menu items for each devices
         self.devices = {}
         for device in self.iobluetooth.IOBluetoothDevice.pairedDevices():
-            self.devices[device.name()] = (device.addressString(), False)
-            self.menu.add(rumps.MenuItem(device.name(), callback=self.switch_callback))
+            self.devices[device.addressString()] = (
+                rumps.MenuItem(device.name(), callback=self.switch_callback),
+                device.name(),
+                False
+            )
+
+        for item, name, previous in sorted(self.devices.values(), key=lambda x: x[1]):
+            self.menu.add(item)
 
         self.menu.add(rumps.separator)
 
@@ -59,12 +65,11 @@ class BluetoothEvent(rumps.App):
         item.state = not item.state
 
     def timer_callback(self, timer):
-        for key, item in self.menu.items():
-            if isinstance(item, rumps.MenuItem) and item.state:
-                self.check(key)
+        for address, value in filter(lambda x: x[1][0].state, self.devices.items()):
+            self.check(address)
 
-    def check(self, key):
-        address, previous = self.devices[key]
+    def check(self, address):
+        item, name, previous = self.devices[address]
 
         device = self.iobluetooth.IOBluetoothDevice.deviceWithAddressString_(address)
         current = device.openConnection() == 0
@@ -72,9 +77,9 @@ class BluetoothEvent(rumps.App):
             device.closeConnection()
 
         if current != previous:
-            self.devices[key] = (address, current)
-            print("{}: {}".format(key, str(current)))
-            self.update_callback(key, current)
+            self.devices[address] = (item, name, current)
+            print("{} ({}): {}".format(name, address, str(current)))
+            self.update_callback(name, address, current)
 
 if __name__ == "__main__":
     BluetoothEvent(INTERVAL, update_callback).run()
