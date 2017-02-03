@@ -18,16 +18,14 @@ Dependencies will be resolved automatically by `setup_requires` keyword of [setu
 
 ## Configure
 
-You can modify device list (`DEVICES`), checking interval (`INTERVAL`) and callback (`update_callback`).
+You can modify checking intervals (`INTERVALS`) and callback (`update_callback`).
 There are defined in [BluetoothEvent.py](https://github.com/lostman-github/BluetoothEvent/blob/master/BluetoothEvent.py).
 
-* DEVICES (default is empty)
-  * Target device name and address.
-* INTERVAL (default is 10min)
-  * Interval time in sec.
-* update_callback (default is pass)
+* INTERVALS
+  * List of interval time in sec.
+* update_callback
   * Callback function which is invoked when connection status is changed.
-  * Device name and status (connected or not) will be passed from this app.
+  * Device name, address and status (connected or not) will be passed from this app.
 
 ## Build
 
@@ -51,7 +49,8 @@ $ python setup.py py2app
 
 Run `BluetoothEvent.app`. (or run `./dist/BluetoothEvent.app/Contents/MacOS/BluetoothEvent` in your terminal.)
 New icon will appear in status bar.
-Your devices are appeared as menu item in menu of status icon.
+Intervals and your devices are appeared as menu item in menu of status icon.
+Please select checking interval and devices.
 When you click device name, clicked item will be marked as checked.
 In next interval, this app will check connection status of checked devices.
 If status is changed, `update_callback` will be called.
