@@ -12,9 +12,10 @@ This is simple app to invoke your Python code when Bluetooth connection status i
 ## Dependencies
 
 Dependencies will be resolved automatically by `setup_requires` keyword of [setuptools](https://setuptools.readthedocs.io/en/latest/).
- 
-* [rumps](https://github.com/jaredks/rumps)
-* [py2app](https://bitbucket.org/ronaldoussoren/py2app)
+
+* [pyobjc](https://pythonhosted.org/pyobjc/)
+* [rumps](http://rumps.readthedocs.io/en/latest/)
+* [py2app](http://pythonhosted.org/py2app/)
 
 ## Configure
 
