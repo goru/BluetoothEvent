@@ -16,7 +16,7 @@ INTERVALS = [
 ]
 
 def update_callback(name, address, state):
-    pass
+    print("{} ({}): {}".format(name, address, str(state)))
 
     # Upload status changes to slack
     #
@@ -114,7 +114,6 @@ class BluetoothEvent(rumps.App):
 
         if current != previous:
             self.devices[address] = (item, name, current)
-            print("{} ({}): {}".format(name, address, str(current)))
             self.update_callback(name, address, current)
 
 if __name__ == "__main__":
